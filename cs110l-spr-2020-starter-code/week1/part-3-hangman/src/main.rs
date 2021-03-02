@@ -56,16 +56,32 @@ fn main() {
         let guess_char = guess.chars().next().unwrap();
 
         if secret_word_chars.iter().any(|&x| x == guess_char) {
-            let idx = secret_word_chars.iter().position(|&x| x == guess_char).unwrap();
-            println!("{}", secret_word_chars[idx].to_string());
-            user_word_chars[idx] = secret_word_chars[idx].to_string();
-            println!("{:?}", user_word_chars);
-
+            user_word_chars = find_all(&secret_word_chars, &mut user_word_chars, &guess_char);
         }
         else {
             errors += 1;
             println!("Incorrect guess {} out of {} guesses remaining!", NUM_INCORRECT_GUESSES - errors, NUM_INCORRECT_GUESSES);
         }
+        
+        let joined = user_word_chars.join("");
+        println!("The word so far: {}", joined);
+        if joined == secret_word {
+            println!("Congratulations you guessed the secret word: {}!", secret_word);
+            break;
+        }
+        if NUM_INCORRECT_GUESSES - errors <= 0 {
+            println!("Sorry you ran out of guesses!");
+            break;
+        }
     }
 
+}
+
+fn find_all(a: &Vec<char>, b: &mut Vec<String>, matched: &char) -> Vec<String> {
+    for (idx, val) in a.iter().enumerate() {
+        if val == matched {
+            b[idx] = val.to_string();
+        }
+    }
+    b.to_vec()
 }
