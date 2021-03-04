@@ -62,9 +62,10 @@ fn main() {
             errors += 1;
             println!("Incorrect guess {} out of {} guesses remaining!", NUM_INCORRECT_GUESSES - errors, NUM_INCORRECT_GUESSES);
         }
-        
+
         let joined = user_word_chars.join("");
         println!("The word so far: {}", joined);
+        
         if joined == secret_word {
             println!("Congratulations you guessed the secret word: {}!", secret_word);
             break;
