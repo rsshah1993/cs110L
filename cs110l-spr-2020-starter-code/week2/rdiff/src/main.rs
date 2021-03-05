@@ -51,23 +51,20 @@ fn lcs(seq1: &Vec<String>, seq2: &Vec<String>) -> Grid {
 }
 
 fn print_diff(lcs_table: &Grid, lines1: &Vec<String>, lines2: &Vec<String>, i: usize, j: usize) {
-    if i > 0 && j > 0 && (lines1[i-1] == lines2[j-1]) {
+    if (i > 0) && (j > 0) && (lines1[i-1] == lines2[j-1]) {
         print_diff(lcs_table, lines1, lines2, i-1, j-1);
         println!(" {}", lines1[i-1]);
-        println!("foo");
     }
-    else if j > 0 && (i == 0 || lcs_table.get(i, j-1) >= lcs_table.get(i-1, j)) {
+    else if (j > 0) && ((i == 0) || (lcs_table.get(i, j-1) >= lcs_table.get(i-1, j))) {
         print_diff(lcs_table, lines1, lines2, i, j-1);
         println!("> {}", lines2[j-1]);
-        println!("bar");
     }
-    else if i > 0 && (j == 0  || lcs_table.get(i, j-1) > lcs_table.get(i-1, j)) {
+    else if (i > 0) && ((j == 0)  || (lcs_table.get(i, j-1) < lcs_table.get(i-1, j))) {
         print_diff(lcs_table, lines1, lines2, i-1, j);
         println!("< {}", lines1[i-1]);
-        println!("foofoo");
     }
     else {
-        println!("end!")
+        println!("")
     };
 
 }
@@ -83,7 +80,6 @@ fn main() {
 
     let file_1_lines: Vec<String> = read_file_lines(filename1).expect("Invalid file!");
     let file_2_lines: Vec<String> = read_file_lines(filename2).expect("Invalid file!");
-    println!("{:?}", file_1_lines);
 
     let lcs_grid: Grid = lcs(&file_1_lines, &file_2_lines);
 
