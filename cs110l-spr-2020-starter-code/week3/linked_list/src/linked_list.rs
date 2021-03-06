@@ -113,11 +113,28 @@ impl <T: PartialEq> PartialEq for LinkedList<T> {
     }
 }
 
-// impl <T: IntoIterator> IntoIterator for LinkedList<T> {
-//     fn into_iter(self) -> Self::IntoIterator {
+pub trait ComputeNorm {
+    fn compute_norm(&self) -> f64 {
+        0.0
+    }
+}
 
-//     }
-// }
+impl ComputeNorm for LinkedList<f64> {
+    fn compute_norm(&self) -> f64 {
+        let mut norm: f64 = 0.0;
+        let mut current: &Option<Box<Node<f64>>> = &self.head;
+        loop {
+            match current {
+                Some(node) => {
+                     norm += node.value * node.value;
+                     current = &node.next;
+                },
+                None => break,
+            }
+        }
+        norm.sqrt()
+    }
+}
 
 impl<T> Drop for LinkedList<T> {
     fn drop(&mut self) {

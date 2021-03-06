@@ -1,5 +1,5 @@
 use linked_list::LinkedList;
-use linked_list::Node;
+use crate::linked_list::ComputeNorm;
 pub mod linked_list;
 
 fn main() {
@@ -27,12 +27,11 @@ fn main() {
     }
     println!("{}", list == empty_list);
 
-    // println!("{:?}", list.head);
+    let mut norm_list: LinkedList<f64> = LinkedList::new();
+    norm_list.push_front(4.0);
+    norm_list.push_front(3.0);
+    println!("Norm of norm_list is {}", norm_list.compute_norm());
 
-    // let node: Node<i32> = Node::new(5, None);
-    // println!("{:?}", node);
-    // let cloned_node = node.clone();
-    // println!("{:?}", cloned_node)
 
     // If you implement iterator trait:
     //for val in &list {
