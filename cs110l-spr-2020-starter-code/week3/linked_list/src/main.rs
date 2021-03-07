@@ -34,7 +34,8 @@ fn main() {
 
 
     // If you implement iterator trait:
-    //for val in &list {
-    //    println!("{}", val);
-    //}
+    for val in &list {
+       println!("{}", val);
+    }
+
 }

@@ -136,6 +136,32 @@ impl ComputeNorm for LinkedList<f64> {
     }
 }
 
+pub struct LinkedListIter<'a, T> {
+    current: &'a Option<Box<Node<T>>>,
+}
+
+
+impl<T: Copy> Iterator for LinkedListIter<'_, T> {
+    type Item = T;
+    fn next(&mut self) -> Option<T> {
+        match self.current {
+            Some(node) => {
+                self.current = &node.next;
+                Some(node.value)
+            },
+            None => None
+        }
+    }
+}
+
+impl<'a, T: Copy> IntoIterator for &'a LinkedList<T> {
+    type Item = T;
+    type IntoIter = LinkedListIter<'a, T>;
+    fn into_iter(self) -> LinkedListIter<'a, T> {
+        LinkedListIter {current: &self.head}
+    }
+}
+
 impl<T> Drop for LinkedList<T> {
     fn drop(&mut self) {
         let mut current = self.head.take();
