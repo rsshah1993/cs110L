@@ -52,7 +52,6 @@ fn factor_number(num: u32) {
 }
 
 /// Returns a list of numbers supplied via argv.
-#[allow(dead_code)]
 fn get_input_numbers() -> VecDeque<u32> {
     let mut numbers = VecDeque::new();
     for arg in env::args().skip(1) {
@@ -66,17 +65,41 @@ fn get_input_numbers() -> VecDeque<u32> {
     numbers
 }
 
+fn do_pop(queue: &mut Arc<Mutex<VecDeque<u32>>>) -> Option<u32> {
+    queue.lock().unwrap().pop_front()
+}
+
 fn main() {
     let num_threads = num_cpus::get();
+
     println!("Farm starting on {} CPUs", num_threads);
     let start = Instant::now();
 
-    // TODO: call get_input_numbers() and store a queue of numbers to factor
+    // call get_input_numbers() and store a queue of numbers to factor
+    let mut queue = Arc::new(Mutex::new(get_input_numbers()));
 
-    // TODO: spawn `num_threads` threads, each of which pops numbers off the queue and calls
+    // spawn `num_threads` threads, each of which pops numbers off the queue and calls
     // factor_number() until the queue is empty
+    let mut handles = Vec::new();
+    for i in 0..num_threads {
+        let mut queue_clone = queue.clone();
+        let handle = thread::spawn(move || {
+            while true {
+                let num = do_pop(&mut queue_clone);
+                match num {
+                    Some(num) => factor_number(num),
+                    None => break
+                }
+            }
 
-    // TODO: join all the threads you created
+        });
+        handles.push(handle);
+    }
+
+    // join all the threads you created
+    for handle in handles {
+        handle.join().unwrap();
+    }
 
     println!("Total execution time: {:?}", start.elapsed());
 }
