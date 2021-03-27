@@ -9,3 +9,5 @@ edition = "2018"
 [dependencies]
 crossbeam-channel = "0.4.2"
 num_cpus = "1.13.0"
+crossbeam = "0.8.0"
+scoped_threadpool = "0.1.9"  
